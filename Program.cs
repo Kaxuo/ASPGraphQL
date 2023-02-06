@@ -1,5 +1,6 @@
 using API.Configurations;
 using API.Context;
+using API.Queries;
 using API.Interfaces;
 using API.Repository;
 
@@ -11,7 +12,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<IMailsRepository, MailsRepository>();
+builder.Services.AddScoped<IMailsRepository, MailsRepository>();
+builder.Services.AddGraphQLServer().AddQueryType<QueryMails>();
 builder.Services.AddDbContext<ApplicationDBContext>();
 builder.Services.Configure<DatabaseOptionsConfig>(configuration.GetSection("ConnectionStrings"));
 
@@ -29,5 +31,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGraphQLHttp("/graphql");
 
 app.Run();
