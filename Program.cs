@@ -3,19 +3,23 @@ using API.Context;
 using API.Queries;
 using API.Interfaces;
 using API.Repository;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+   x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles); ;
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IMailsRepository, MailsRepository>();
-builder.Services.AddGraphQLServer().AddQueryType<QueryMails>();
 builder.Services.AddDbContext<ApplicationDBContext>();
+builder.Services.AddScoped<IMailsRepository, MailsRepository>();
+builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddGraphQLServer().AddQueryType<Query>();
 builder.Services.Configure<DatabaseOptionsConfig>(configuration.GetSection("ConnectionStrings"));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 

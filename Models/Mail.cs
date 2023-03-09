@@ -1,20 +1,19 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace API.Models
 {
-    public class Mails
+    public class Mail
     {
         [Key]
         public int Id { get; set; }
         [Required(ErrorMessage = "Sender is required")]
-        public string Sender { get; set; } = null!;
-        [Required(ErrorMessage = "Receiver is required")]
-        public string Receiver { get; set; } = null!;
-        [Required(ErrorMessage = "Subject is required")]
         public string Subject { get; set; } = null!;
         [Required(ErrorMessage = "Content is required")]
         public string Content { get; set; } = null!;
-        [Required(ErrorMessage = "Value is required")]
-        public bool Fake { get; set; }
+        public int UserId { get; set; }
+        [ForeignKey("UserId")]
+        public User User { get; set; } = null!;
     }
 }

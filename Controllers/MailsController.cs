@@ -1,6 +1,8 @@
+using API.ConsumerModels;
 using API.Interfaces;
 using API.Models;
 using API.Repository;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -8,15 +10,27 @@ namespace API.Controllers
     [ApiController]
     public class MailsController : Controller
     {
+        private readonly IMapper _mapper;
         IMailsRepository _mailsRepository = null!;
-        public MailsController(IMailsRepository mailsRepository)
+        IUsersRepository _usersRepository = null!;
+        public MailsController(IMailsRepository mailsRepository, IMapper mapper, IUsersRepository usersRepository)
         {
+            _mapper = mapper;
             _mailsRepository = mailsRepository;
+            _usersRepository = usersRepository;
         }
         [HttpGet("all")]
-        public IQueryable<Mails> GetAbsorbedPortfoliosAsync()
+        public IEnumerable<ConsumerMail> GetAllMails()
         {
-            return _mailsRepository.GetAllMails();
+            var mails = _mailsRepository.GetAllMails();
+            return _mapper.Map<IEnumerable<ConsumerMail>>(mails);
+        }
+
+        [HttpGet("users")]
+        public IEnumerable<ConsumerUser> GetAllUsers()
+        {
+            var users = _usersRepository.GetAllUsers();
+            return _mapper.Map<IEnumerable<ConsumerUser>>(users);
         }
     }
 }

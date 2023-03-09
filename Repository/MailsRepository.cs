@@ -1,6 +1,7 @@
 using API.Context;
 using API.Interfaces;
 using API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Repository
 {
@@ -11,15 +12,15 @@ namespace API.Repository
         {
             _appDbContext = appDbContext;
         }
-
-        public IQueryable<Mails> GetAllMails()
+        
+        public IEnumerable<Mail> GetAllMails()
         {
-            return _appDbContext.Mails;
+            return _appDbContext.Mails.Include(x => x.User);
         }
 
-        public Mails GetOneMail(int id)
+        public Mail GetOneMail(int id)
         {
-            return _appDbContext.Mails.Where(x => x.Id == id).First();
+            return _appDbContext.Mails.Where(x => x.Id == id).Include(x => x.User).First();
         }
     }
 }

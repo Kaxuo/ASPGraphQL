@@ -16,6 +16,7 @@ namespace API.Context
         {
             optionsBuilder.UseSqlServer(_dbOptionsConfig.Value.SqlServer!);
         }
-        public DbSet<Mails> Mails { get; set; } = null!;
+        public DbSet<Mail> Mails { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;
     }
 }
